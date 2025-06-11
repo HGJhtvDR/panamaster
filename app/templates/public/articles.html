@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Panamaster - Статьи{% endblock %}
+
+{% block content %}
+<section class="articles-section">
+    <h1>Статьи и публикации</h1>
+    
+    <div class="articles-filters">
+        <div class="search-box">
+            <input type="text" id="article-search" placeholder="Поиск статей...">
+        </div>
+        <div class="category-filters">
+            <button class="category-btn active" data-category="all">Все</button>
+            <button class="category-btn" data-category="tech">Технологии</button>
+            <button class="category-btn" data-category="business">Бизнес</button>
+            <button class="category-btn" data-category="development">Разработка</button>
+        </div>
+    </div>
+
+    <div class="articles-grid">
+        {% for article in articles %}
+        <article class="article-card">
+            <div class="article-image">
+                <img src="{{ article.image_url }}" alt="{{ article.title }}">
+            </div>
+            <div class="article-content">
+                <div class="article-meta">
+                    <span class="article-date">{{ article.date }}</span>
+                    <span class="article-category">{{ article.category }}</span>
+                </div>
+                <h2>{{ article.title }}</h2>
+                <p>{{ article.excerpt }}</p>
+                <a href="{{ url_for('main.article', id=article.id) }}" class="read-more">Читать далее</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        {% if pagination.has_prev %}
+        <a href="{{ url_for('main.articles', page=pagination.prev_num) }}" class="page-link">Предыдущая</a>
+        {% endif %}
+        
+        {% for page in pagination.iter_pages() %}
+            {% if page %}
+                <a href="{{ url_for('main.articles', page=page) }}" class="page-link {% if page == pagination.page %}active{% endif %}">{{ page }}</a>
+            {% else %}
+                <span class="page-link disabled">...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if pagination.has_next %}
+        <a href="{{ url_for('main.articles', page=pagination.next_num) }}" class="page-link">Следующая</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %} 

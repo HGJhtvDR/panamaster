@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}405 Method Not Allowed{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <h1>405 Method Not Allowed</h1>
+    <p>Метод запроса не поддерживается для данного URL.</p>
+    <p><a href="{{ url_for('main.index') }}">Вернуться на главную</a></p>
+</div>
+{% endblock %} 

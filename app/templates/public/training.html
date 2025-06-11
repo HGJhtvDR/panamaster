@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Panamaster - Обучение{% endblock %}
+
+{% block content %}
+<section class="training-section">
+    <h1>Образовательные программы</h1>
+    
+    <div class="courses-grid">
+        {% for course in courses %}
+        <div class="course-card">
+            <div class="course-header">
+                <h3>{{ course.title }}</h3>
+                <span class="course-level">{{ course.level }}</span>
+            </div>
+            <div class="course-content">
+                <p>{{ course.description }}</p>
+                <ul class="course-features">
+                    {% for feature in course.features %}
+                    <li>{{ feature }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="course-footer">
+                <span class="course-duration">{{ course.duration }}</span>
+                <span class="course-price">{{ course.price }}</span>
+                <a href="{{ url_for('main.course_details', id=course.id) }}" class="course-link">Подробнее</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %} 

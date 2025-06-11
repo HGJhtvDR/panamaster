@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} - Panamaster{% endblock %}
+
+{% block content %}
+<article class="article-detail">
+    <div class="article-header">
+        <div class="article-meta">
+            <span class="article-date">{{ article.date.strftime('%d.%m.%Y') }}</span>
+            <span class="article-category">{{ article.category }}</span>
+        </div>
+        <h1>{{ article.title }}</h1>
+        {% if article.image_url %}
+        <div class="article-image">
+            <img src="{{ article.image_url }}" alt="{{ article.title }}">
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="article-content">
+        {{ article.content|safe }}
+    </div>
+    
+    <div class="article-footer">
+        <div class="article-share">
+            <h3>Поделиться:</h3>
+            <div class="share-buttons">
+                <a href="#" class="share-btn facebook">Facebook</a>
+                <a href="#" class="share-btn twitter">Twitter</a>
+                <a href="#" class="share-btn linkedin">LinkedIn</a>
+            </div>
+        </div>
+    </div>
+</article>
+{% endblock %} 

@@ -1,0 +1,127 @@
+project_root/                           # Корневая директория проекта (вне веб-доступа, защищена)
+├── app/                                # Flask-приложение: логика, маршруты, шаблоны
+│   ├── __init__.py                     # Инициализация Flask, JWT, CSRF, Limiter, SQLAlchemy
+│   ├── main/                           # Основные публичные маршруты (главная, услуги, компания и др.)
+│   │   ├── __init__.py
+│   │   └── views.py
+│   ├── auth/                           # Маршруты аутентификации (логин, регистрация, логаут)
+│   │   ├── __init__.py
+│   │   └── views.py
+│   ├── api/                            # API-маршруты (REST, health-check и др.)
+│   │   ├── __init__.py
+│   │   └── views.py
+│   ├── templates/                      # Jinja2 HTML-шаблоны (XSS-санитайзинг)
+│   │   ├── public/                     # Раздел публичного доступа
+│   │   │   ├── index.html              # Главная
+│   │   │   ├── services.html
+│   │   │   ├── portfolio.html
+│   │   │   ├── training.html
+│   │   │   ├── company.html
+│   │   │   ├── contact.html            # Включает CSRF-токен
+│   │   │   ├── articles.html
+│   │   │   ├── jobs.html
+│   │   │   └── partners.html
+│   ├── static/                         # Публичные ресурсы (отдаются через nginx с CSP)
+│   │   ├── css/                        # Минифицированные стили + SRI (Subresource Integrity)
+│   │   ├── js/                         # Скрипты (ограничены CSP)
+│   │   └── img/                        # Интерфейсные изображения (оптимизированы)
+│   ├── models/                         # SQLAlchemy-модели, защитные меры (ORM, хеширование)
+│   │   ├── __init__.py
+│   │   ├── user.py                     # Хеширование bcrypt, роли
+│   │   ├── portfolio.py
+│   │   ├── product.py
+│   │   ├── category.py
+│   │   ├── knowledge.py
+│   │   ├── article.py
+│   │   ├── job.py
+│   │   └── log.py                      # Аудит действий, регистрация API
+│   ├── services/                       # Бизнес-логика, интеграции, AI
+│   │   ├── ai/
+│   │   │   ├── __init__.py
+│   │   │   ├── text_generator.py
+│   │   │   ├── seo_optimizer.py
+│   │   │   └── image_analyzer.py
+│   │   └── file_processor.py           # Проверка MIME, secure_filename
+│   └── utils/                          # Утилиты
+│       ├── __init__.py
+│       ├── db.py                       # SQLAlchemy с SSL, reconnect
+│       └── file_utils.py               # Ограничение форматов, размеров
+
+├── config/                             # Средовые конфигурации
+│   ├── __init__.py
+│   ├── base.py                         # Общие параметры (Flask, JWT)
+│   ├── dev.py                          # DEBUG=True, тестовая почта
+│   ├── prod.py                         # HTTPS, secure cookies, CSP
+│   └── test.py                         # Изолированная БД, mock-почта
+
+├── uploads/                            # Ограниченные Flask-доступом папки
+│   ├── portfolio/                      # Валидация: JPEG/PNG, размер, EXIF
+│   ├── knowledge_attachments/          # PDF, ZIP (антивирусное сканирование опционально)
+│   └── diagnostics/                    # Файлы доступа только по токену авторизации
+
+├── knowledge_base/                     # Системная база знаний (через API-доступ)
+│   ├── codimag/
+│   │   ├── manuals/
+│   │   ├── firmwares/
+│   │   ├── drivers/
+│   │   └── cases/
+│   ├── parker/
+│   │   ├── manuals/
+│   │   ├── firmwares/
+│   │   ├── drivers/
+│   │   └── cases/
+│   └── README.md                       # Как добавлять и использовать
+
+├── shop/                               # Каталог товаров (читается только через Flask)
+│   ├── images/                         # Проверенные и оптимизированные изображения
+│   └── README.md                       # Формат хранения, интеграция с шаблонами
+
+├── telegram_agent/                     # Telegram-бот (отдельное приложение)
+│   ├── main.py
+│   ├── handlers/
+│   │   ├── __init__.py
+│   │   ├── user_query.py
+│   │   ├── portfolio_search.py
+│   │   └── shop_recommendation.py
+│   ├── ai/
+│   │   ├── __init__.py
+│   │   ├── rag_pipeline.py
+│   │   └── classifier_model.pkl        # Переносится в ml_data/models
+│   ├── prompts/
+│   │   └── technician_assist.txt
+│   └── logs/                           # Доступ только локально, лог-ротация
+
+├── ml_data/                            # Обучение моделей, аналитика
+│   ├── raw/                            # Исходные CSV, JSON, логи (шифруются при необходимости)
+│   ├── processed/                      # Feature-инженеринг
+│   ├── models/                         # *.pkl модели (не в гите)
+│   └── notebooks/                      # Jupyter-анализ (без продакшен-логики)
+
+├── database/                           # Миграции и начальные данные
+│   ├── migrations/                     # Alembic
+│   ├── seed_data/                      # Примеры товаров, вакансий, пользователей
+│   └── schema.sql                      # ❗ Удалить или заархивировать после Alembic
+
+├── scripts/                            # Вспомогательные утилиты (cron, генерация данных)
+│   ├── sync_portfolio.py
+│   ├── generate_knowledge.py
+│   └── seo_optimizer.py
+
+├── tests/                              # Pytest + coverage
+│   ├── test_routes/
+│   ├── test_models/
+│   ├── test_services/
+│   └── test_api/
+
+├── docker/                             # Продакшен-инфраструктура
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── nginx.conf                      # Ограничение доступа к /uploads/, CSP, HTTPS
+
+├── .gitignore                          # Исключения: .env, *.pkl, /logs, /uploads
+├── sitemap.xml                         # Автогенерация из маршрутов (для SEO)
+├── robots.txt                          # Запрет индексации /uploads/, /admin и пр.
+├── run.py                              # Flask runner (через .env)
+├── requirements.txt                    # pip зависимости (разделены по dev/prod)
+├── .env                                # Переменные (DB_URL, TELEGRAM_TOKEN, API_KEY)
+└── README.md                           # Полная инструкция: запуск, структура, безопасность

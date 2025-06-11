@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Panamaster{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{% url 'main:index' %}">Panamaster</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{% url 'main:index' %}">Главная</a></li>
+                <li><a href="#">Услуги</a></li>
+                <li><a href="#">О нас</a></li>
+                <li><a href="#">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>Телефон: +7 (XXX) XXX-XX-XX</p>
+                <p>Email: info@panamaster.ru</p>
+            </div>
+            <div class="footer-section">
+                <h3>Адрес</h3>
+                <p>г. Москва, ул. Примерная, д. 1</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Panamaster. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'main/js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

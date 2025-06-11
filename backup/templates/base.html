@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}Panamaster{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main.index') }}">Главная</a></li>
+                <li><a href="{{ url_for('main.services') }}">Услуги</a></li>
+                <li><a href="{{ url_for('main.portfolio') }}">Портфолио</a></li>
+                <li><a href="{{ url_for('main.training') }}">Обучение</a></li>
+                <li><a href="{{ url_for('main.company') }}">О компании</a></li>
+                <li><a href="{{ url_for('main.contact') }}">Контакты</a></li>
+                <li><a href="{{ url_for('main.articles') }}">Статьи</a></li>
+                <li><a href="{{ url_for('main.jobs') }}">Вакансии</a></li>
+                <li><a href="{{ url_for('main.partners') }}">Партнеры</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message|safe }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>Email: info@panamaster.ru</p>
+                <p>Телефон: +7 (XXX) XXX-XX-XX</p>
+            </div>
+            <div class="footer-section">
+                <h3>Социальные сети</h3>
+                <div class="social-links">
+                    <a href="#" target="_blank" rel="noopener noreferrer">VK</a>
+                    <a href="#" target="_blank" rel="noopener noreferrer">Telegram</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {{ now.year }} Panamaster. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

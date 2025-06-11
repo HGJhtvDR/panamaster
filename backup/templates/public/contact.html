@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Panamaster - Контакты{% endblock %}
+
+{% block content %}
+<section class="contact-section">
+    <h1>Свяжитесь с нами</h1>
+    
+    <div class="contact-info">
+        <div class="info-card">
+            <h3>Адрес</h3>
+            <p>г. Москва, ул. Примерная, д. 123</p>
+        </div>
+        <div class="info-card">
+            <h3>Телефон</h3>
+            <p>+7 (XXX) XXX-XX-XX</p>
+        </div>
+        <div class="info-card">
+            <h3>Email</h3>
+            <p>info@panamaster.ru</p>
+        </div>
+    </div>
+
+    <form class="contact-form" method="POST" action="{{ url_for('main.contact') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
+        <div class="form-group">
+            <label for="name">Ваше имя</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Тема</label>
+            <input type="text" id="subject" name="subject" required>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Сообщение</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Отправить сообщение</button>
+    </form>
+</section>
+
+<div class="map-section">
+    <h2>Как нас найти</h2>
+    <div id="map" class="map-container"></div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU"></script>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+{% endblock %} 

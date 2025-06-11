@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1>Профессиональный сервис промышленного оборудования</h1>
+        <p>Ремонт, обслуживание и модернизация промышленного оборудования любой сложности</p>
+        <a href="{{ url_for('public.contact') }}" class="btn btn-primary btn-lg">Получить консультацию</a>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="services-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Наши услуги</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h3>Ремонт оборудования</h3>
+                    <p>Профессиональный ремонт промышленного оборудования любой сложности. Диагностика, устранение неисправностей, замена комплектующих.</p>
+                    <ul class="list-unstyled">
+                        <li>✓ Диагностика неисправностей</li>
+                        <li>✓ Ремонт электроники</li>
+                        <li>✓ Замена комплектующих</li>
+                        <li>✓ Настройка и тестирование</li>
+                    </ul>
+                    <a href="{{ url_for('public.services') }}" class="btn btn-primary mt-3">Подробнее</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h3>Техническое обслуживание</h3>
+                    <p>Регулярное техническое обслуживание промышленного оборудования для обеспечения его бесперебойной работы.</p>
+                    <ul class="list-unstyled">
+                        <li>✓ Плановое обслуживание</li>
+                        <li>✓ Профилактические работы</li>
+                        <li>✓ Чистка и смазка</li>
+                        <li>✓ Проверка работоспособности</li>
+                    </ul>
+                    <a href="{{ url_for('public.services') }}" class="btn btn-primary mt-3">Подробнее</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <h3>Модернизация</h3>
+                    <p>Модернизация устаревшего оборудования для повышения его эффективности и производительности.</p>
+                    <ul class="list-unstyled">
+                        <li>✓ Анализ возможностей</li>
+                        <li>✓ Разработка решений</li>
+                        <li>✓ Установка новых компонентов</li>
+                        <li>✓ Обучение персонала</li>
+                    </ul>
+                    <a href="{{ url_for('public.services') }}" class="btn btn-primary mt-3">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Advantages Section -->
+<section class="advantages-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Почему выбирают нас</h2>
+        <div class="row">
+            <div class="col-md-3 text-center mb-4">
+                <div class="advantage-item">
+                    <i class="fas fa-tools fa-3x mb-3 text-primary"></i>
+                    <h4>Опыт работы</h4>
+                    <p>Более 10 лет опыта в ремонте и обслуживании промышленного оборудования</p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <div class="advantage-item">
+                    <i class="fas fa-users fa-3x mb-3 text-primary"></i>
+                    <h4>Квалифицированные специалисты</h4>
+                    <p>Команда профессионалов с многолетним опытом работы</p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <div class="advantage-item">
+                    <i class="fas fa-clock fa-3x mb-3 text-primary"></i>
+                    <h4>Оперативность</h4>
+                    <p>Быстрый выезд на объект и оперативное решение проблем</p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <div class="advantage-item">
+                    <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
+                    <h4>Гарантия качества</h4>
+                    <p>Гарантия на все виды работ и используемые комплектующие</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2>Нужна консультация?</h2>
+                <p class="lead">Оставьте заявку, и мы свяжемся с вами в ближайшее время</p>
+                <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                    Заказать звонок
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %} 

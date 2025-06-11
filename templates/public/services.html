@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Услуги{% endblock %}
+
+{% block content %}
+<!-- Services Header -->
+<section class="services-header py-5 bg-light">
+    <div class="container">
+        <h1 class="text-center mb-4">Наши услуги</h1>
+        <p class="lead text-center">Профессиональный сервис промышленного оборудования любой сложности</p>
+    </div>
+</section>
+
+<!-- Main Services -->
+<section class="main-services py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="service-card h-100">
+                    <h3>Ремонт промышленного оборудования</h3>
+                    <p>Мы выполняем ремонт промышленного оборудования любой сложности. Наши специалисты имеют многолетний опыт работы с различными типами оборудования.</p>
+                    <ul class="list-unstyled">
+                        <li>✓ Диагностика неисправностей</li>
+                        <li>✓ Ремонт электроники и механики</li>
+                        <li>✓ Замена комплектующих</li>
+                        <li>✓ Настройка и тестирование</li>
+                        <li>✓ Восстановление работоспособности</li>
+                    </ul>
+                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                        Заказать ремонт
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="service-card h-100">
+                    <h3>Техническое обслуживание</h3>
+                    <p>Регулярное техническое обслуживание - залог бесперебойной работы вашего оборудования.</p>
+                    <ul class="list-unstyled">
+                        <li>✓ Плановое обслуживание</li>
+                        <li>✓ Профилактические работы</li>
+                        <li>✓ Чистка и смазка</li>
+                        <li>✓ Проверка работоспособности</li>
+                        <li>✓ Настройка параметров</li>
+                    </ul>
+                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                        Заказать обслуживание
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Additional Services -->
+<section class="additional-services py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Дополнительные услуги</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="service-card">
+                    <h4>Модернизация оборудования</h4>
+                    <p>Повышение эффективности и производительности вашего оборудования</p>
+                    <ul class="list-unstyled">
+                        <li>✓ Анализ возможностей</li>
+                        <li>✓ Разработка решений</li>
+                        <li>✓ Установка новых компонентов</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="service-card">
+                    <h4>Консультации</h4>
+                    <p>Профессиональные консультации по эксплуатации и обслуживанию</p>
+                    <ul class="list-unstyled">
+                        <li>✓ Выбор оборудования</li>
+                        <li>✓ Эксплуатация</li>
+                        <li>✓ Обучение персонала</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="service-card">
+                    <h4>Аварийное обслуживание</h4>
+                    <p>Оперативный выезд и устранение неисправностей</p>
+                    <ul class="list-unstyled">
+                        <li>✓ Круглосуточная поддержка</li>
+                        <li>✓ Быстрый выезд</li>
+                        <li>✓ Оперативное решение</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2>Нужна консультация по услугам?</h2>
+                <p class="lead">Оставьте заявку, и мы свяжемся с вами для обсуждения деталей</p>
+                <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                    Получить консультацию
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

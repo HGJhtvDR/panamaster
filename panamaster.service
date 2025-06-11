@@ -1,0 +1,14 @@
+[Unit]
+Description=Panamaster Web Application
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/panamaster
+Environment="PATH=/var/www/panamaster/venv/bin"
+ExecStart=/var/www/panamaster/venv/bin/gunicorn -c gunicorn_config.py app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target 

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Panamaster - Вакансии{% endblock %}
+
+{% block content %}
+<section class="jobs-section">
+    <h1>Карьера в Panamaster</h1>
+    
+    <div class="jobs-filters">
+        <div class="search-box">
+            <input type="text" id="job-search" placeholder="Поиск вакансий...">
+        </div>
+        <div class="department-filters">
+            <button class="department-btn active" data-department="all">Все отделы</button>
+            <button class="department-btn" data-department="development">Разработка</button>
+            <button class="department-btn" data-department="design">Дизайн</button>
+            <button class="department-btn" data-department="marketing">Маркетинг</button>
+        </div>
+    </div>
+
+    <div class="jobs-grid">
+        {% for job in jobs %}
+        <div class="job-card">
+            <div class="job-header">
+                <h3>{{ job.title }}</h3>
+                <span class="job-department">{{ job.department }}</span>
+            </div>
+            <div class="job-details">
+                <div class="job-meta">
+                    <span class="job-location">{{ job.location }}</span>
+                    <span class="job-type">{{ job.type }}</span>
+                    <span class="job-salary">{{ job.salary }}</span>
+                </div>
+                <div class="job-description">
+                    <p>{{ job.description }}</p>
+                </div>
+                <div class="job-requirements">
+                    <h4>Требования:</h4>
+                    <ul>
+                        {% for requirement in job.requirements %}
+                        <li>{{ requirement }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="job-footer">
+                <a href="{{ url_for('main.job_apply', id=job.id) }}" class="apply-btn">Откликнуться</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %} 

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.title }} - Panamaster{% endblock %}
+
+{% block content %}
+<section class="course-detail">
+    <div class="course-header">
+        <h1>{{ course.title }}</h1>
+        <div class="course-meta">
+            <span class="course-level">{{ course.level }}</span>
+            <span class="course-duration">{{ course.duration }}</span>
+            <span class="course-price">{{ course.price }} ₽</span>
+        </div>
+    </div>
+    
+    <div class="course-content">
+        <div class="course-description">
+            <h2>О курсе</h2>
+            <p>{{ course.description }}</p>
+        </div>
+        
+        <div class="course-features">
+            <h2>Что вы получите</h2>
+            <ul>
+                {% for feature in course.features %}
+                <li>{{ feature }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="course-program">
+            <h2>Программа курса</h2>
+            <div class="program-modules">
+                <!-- Здесь будет программа курса -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="course-footer">
+        <div class="course-cta">
+            <a href="#" class="btn btn-primary">Записаться на курс</a>
+            <a href="#" class="btn btn-outline">Задать вопрос</a>
+        </div>
+    </div>
+</section>
+{% endblock %} 

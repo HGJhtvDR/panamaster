@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Panamaster - О компании{% endblock %}
+
+{% block content %}
+<section class="company-section">
+    <h1>О компании Panamaster</h1>
+    
+    <div class="company-info">
+        <div class="company-description">
+            <h2>Наша миссия</h2>
+            <p>Мы стремимся к инновациям и качеству в каждой детали нашей работы.</p>
+        </div>
+        
+        <div class="company-stats">
+            <div class="stat-item">
+                <span class="stat-number">10+</span>
+                <span class="stat-label">Лет опыта</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Проектов</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">1000+</span>
+                <span class="stat-label">Довольных клиентов</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="team-section">
+        <h2>Наша команда</h2>
+        <div class="team-grid">
+            {% for member in team %}
+            <div class="team-member">
+                <img src="{{ member.photo_url }}" alt="{{ member.name }}">
+                <h3>{{ member.name }}</h3>
+                <p class="member-position">{{ member.position }}</p>
+                <p class="member-description">{{ member.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %} 

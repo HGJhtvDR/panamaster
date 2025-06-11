@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}О компании{% endblock %}
+
+{% block content %}
+<!-- Company Header -->
+<section class="company-header py-5 bg-light">
+    <div class="container">
+        <h1 class="text-center mb-4">О компании</h1>
+        <p class="lead text-center">Профессиональный сервис промышленного оборудования с 2010 года</p>
+    </div>
+</section>
+
+<!-- Company Info -->
+<section class="company-info py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-4">
+                <div class="company-card">
+                    <h2>Наша миссия</h2>
+                    <p>Мы стремимся обеспечить максимальную эффективность и надежность промышленного оборудования наших клиентов, предоставляя профессиональные услуги по ремонту, обслуживанию и модернизации.</p>
+                    <h3 class="mt-4">Наши ценности</h3>
+                    <ul class="list-unstyled">
+                        <li>✓ Профессионализм</li>
+                        <li>✓ Надежность</li>
+                        <li>✓ Качество</li>
+                        <li>✓ Инновации</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="company-card">
+                    <h2>Наши преимущества</h2>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-primary me-2"></i>
+                            <strong>Опыт работы</strong>
+                            <p>Более 10 лет на рынке промышленного сервиса</p>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-primary me-2"></i>
+                            <strong>Квалифицированные специалисты</strong>
+                            <p>Команда профессионалов с многолетним опытом</p>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-primary me-2"></i>
+                            <strong>Современное оборудование</strong>
+                            <p>Использование передовых технологий и инструментов</p>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-primary me-2"></i>
+                            <strong>Гарантия качества</strong>
+                            <p>Гарантия на все виды работ и используемые комплектующие</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="team-section py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Наша команда</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="team-card">
+                    <div class="team-member">
+                        <i class="fas fa-user-circle fa-5x mb-3 text-primary"></i>
+                        <h4>Иванов Иван</h4>
+                        <p class="text-muted">Генеральный директор</p>
+                        <p>Более 15 лет опыта в промышленном сервисе</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="team-card">
+                    <div class="team-member">
+                        <i class="fas fa-user-circle fa-5x mb-3 text-primary"></i>
+                        <h4>Петров Петр</h4>
+                        <p class="text-muted">Технический директор</p>
+                        <p>Эксперт по ремонту промышленного оборудования</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="team-card">
+                    <div class="team-member">
+                        <i class="fas fa-user-circle fa-5x mb-3 text-primary"></i>
+                        <h4>Сидоров Сидор</h4>
+                        <p class="text-muted">Главный инженер</p>
+                        <p>Специалист по модернизации оборудования</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2>Готовы начать сотрудничество?</h2>
+                <p class="lead">Свяжитесь с нами для обсуждения ваших потребностей</p>
+                <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                    Связаться с нами
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %} 

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Panamaster - Главная{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Добро пожаловать в Panamaster</h1>
+    <p>Ваш надежный партнер в мире технологий</p>
+</section>
+
+<section class="features">
+    <div class="feature-card">
+        <h3>Профессиональные услуги</h3>
+        <p>Комплексные решения для вашего бизнеса</p>
+    </div>
+    <div class="feature-card">
+        <h3>Обучение</h3>
+        <p>Курсы и тренинги от экспертов</p>
+    </div>
+    <div class="feature-card">
+        <h3>Поддержка</h3>
+        <p>24/7 техническая поддержка</p>
+    </div>
+</section>
+
+<section class="latest-news">
+    <h2>Последние новости</h2>
+    <div class="news-grid">
+        {% for article in latest_articles %}
+        <article class="news-card">
+            <h3>{{ article.title|safe }}</h3>
+            <p>{{ article.excerpt|safe }}</p>
+            <a href="{{ url_for('main.article', id=article.id) }}" class="read-more">Читать далее</a>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %} 

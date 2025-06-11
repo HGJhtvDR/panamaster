@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Panamaster - Партнеры{% endblock %}
+
+{% block content %}
+<section class="partners-section">
+    <h1>Наши партнеры</h1>
+    
+    <div class="partners-info">
+        <h2>Станьте нашим партнером</h2>
+        <p>Мы открыты для сотрудничества и готовы обсудить взаимовыгодные условия партнерства.</p>
+    </div>
+
+    <div class="partners-grid">
+        {% for partner in partners %}
+        <div class="partner-card">
+            <div class="partner-logo">
+                <img src="{{ partner.logo_url }}" alt="{{ partner.name }}">
+            </div>
+            <div class="partner-info">
+                <h3>{{ partner.name }}</h3>
+                <p>{{ partner.description }}</p>
+                <div class="partner-meta">
+                    <span class="partner-type">{{ partner.type }}</span>
+                    <span class="partner-since">С {{ partner.since }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="become-partner">
+        <h2>Хотите стать партнером?</h2>
+        <p>Заполните форму, и мы свяжемся с вами для обсуждения деталей сотрудничества.</p>
+        <form class="partner-form" method="POST" action="{{ url_for('main.partner_request') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="form-group">
+                <label for="company">Название компании</label>
+                <input type="text" id="company" name="company" required>
+            </div>
+
+            <div class="form-group">
+                <label for="contact_name">Контактное лицо</label>
+                <input type="text" id="contact_name" name="contact_name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Телефон</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Сообщение</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Отправить заявку</button>
+        </form>
+    </div>
+</section>
+{% endblock %} 
