@@ -1,7 +1,8 @@
 from app import db
 
+
 class Service(db.Model):
-    __tablename__ = 'services'
+    __tablename__ = "services"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -9,4 +10,4 @@ class Service(db.Model):
     active = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
-        return f'<Service {self.name}>' 
+        return f"<Service {self.name}>"

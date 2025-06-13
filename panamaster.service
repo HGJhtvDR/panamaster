@@ -11,4 +11,4 @@ ExecStart=/var/www/panamaster/venv/bin/gunicorn -c gunicorn_config.py app:app
 Restart=always
 
 [Install]
-WantedBy=multi-user.target 
+WantedBy=multi-user.target

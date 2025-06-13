@@ -26,4 +26,4 @@ server {
     if ($host = www.panamaster.ru) {
         return 301 http://panamaster.ru$request_uri;
     }
-} 
+}

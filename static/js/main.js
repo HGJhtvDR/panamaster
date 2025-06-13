@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (callbackForm) {
         callbackForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value
@@ -40,14 +40,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Здесь можно добавить отправку данных на сервер
             console.log('Callback form submitted:', formData);
-            
+
             // Показываем сообщение об успехе
             alert('Спасибо! Мы свяжемся с вами в ближайшее время.');
-            
+
             // Закрываем модальное окно
             const modal = bootstrap.Modal.getInstance(document.getElementById('callbackModal'));
             modal.hide();
-            
+
             // Очищаем форму
             callbackForm.reset();
         });
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
@@ -68,10 +68,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Здесь можно добавить отправку данных на сервер
             console.log('Contact form submitted:', formData);
-            
+
             // Показываем сообщение об успехе
             alert('Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.');
-            
+
             // Очищаем форму
             contactForm.reset();
         });
@@ -85,4 +85,4 @@ document.addEventListener('DOMContentLoaded', function() {
             e.target.value = !x[2] ? x[1] : '+7 (' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '') + (x[4] ? '-' + x[4] : '');
         });
     });
-}); 
+});

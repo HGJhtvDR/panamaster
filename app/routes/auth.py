@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.exc import IntegrityError
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db
 from app.forms import LoginForm, RegistrationForm
@@ -55,7 +55,10 @@ def register():
             return redirect(url_for("auth.login"))
         except IntegrityError:
             db.session.rollback()
-            flash("Произошла ошибка при регистрации. Возможно, такой email или имя пользователя уже существуют.", "error")
+            flash(
+                "Произошла ошибка при регистрации. Возможно, такой email или имя пользователя уже существуют.",
+                "error",
+            )
         except Exception as e:
             db.session.rollback()
             flash("Произошла ошибка при регистрации", "error")

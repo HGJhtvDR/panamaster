@@ -5,7 +5,7 @@
 {% block content %}
 <section class="contact-section">
     <h1>Свяжитесь с нами</h1>
-    
+
     <div class="contact-info">
         <div class="info-card">
             <h3>Адрес</h3>
@@ -23,7 +23,7 @@
 
     <form class="contact-form" method="POST" action="{{ url_for('main.contact') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        
+
         <div class="form-group">
             <label for="name">Ваше имя</label>
             <input type="text" id="name" name="name" required>
@@ -61,4 +61,4 @@
 {% block extra_js %}
 <script src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU"></script>
 <script src="{{ url_for('static', filename='js/map.js') }}"></script>
-{% endblock %} 
+{% endblock %}

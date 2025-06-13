@@ -34,4 +34,4 @@ volumes:
 
 networks:
   panamaster-network:
-    driver: bridge 
+    driver: bridge

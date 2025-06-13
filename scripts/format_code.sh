@@ -14,4 +14,4 @@ flake8 . --fix
 
 # Проверка типов
 echo "Running MyPy..."
-mypy . 
+mypy .

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Проверка прав суперпользователя
-if [ "$EUID" -ne 0 ]; then 
+if [ "$EUID" -ne 0 ]; then
     echo "Пожалуйста, запустите скрипт с правами суперпользователя"
     exit 1
 fi
@@ -43,12 +43,12 @@ read -r install_ssl
 if [ "$install_ssl" = "y" ]; then
     echo "Установка Certbot..."
     apt-get install -y certbot python3-certbot-nginx
-    
+
     echo "Введите доменное имя (например, panamaster.com):"
     read -r domain_name
-    
+
     echo "Получение SSL сертификата..."
     certbot --nginx -d "$domain_name" -d "www.$domain_name"
 fi
 
-echo "Настройка Nginx завершена!" 
+echo "Настройка Nginx завершена!"

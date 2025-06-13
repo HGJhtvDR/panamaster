@@ -17,9 +17,10 @@ from flask_principal import Permission, Principal, RoleNeed
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
-from config import config
-from app.security import apply_security_headers
+
 from app.errors import init_error_handlers
+from app.security import apply_security_headers
+from config import config
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -54,11 +55,13 @@ def load_user(user_id):
 def create_app(config_name):
     # Получаем абсолютный путь к директории приложения
     base_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-    
-    app = Flask(__name__,
-                template_folder=os.path.join(base_dir, 'templates'),
-                static_folder=os.path.join(base_dir, 'static'))
-    
+
+    app = Flask(
+        __name__,
+        template_folder=os.path.join(base_dir, "templates"),
+        static_folder=os.path.join(base_dir, "static"),
+    )
+
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
@@ -77,15 +80,19 @@ def create_app(config_name):
     csrf.init_app(app)
     cache.init_app(app)
     limiter.init_app(app)
-    CORS(app, 
-         resources={r"/*": {
-             "origins": app.config['CORS_ORIGINS'],
-             "methods": app.config['CORS_METHODS'],
-             "allow_headers": app.config['CORS_ALLOW_HEADERS'],
-             "expose_headers": app.config['CORS_EXPOSE_HEADERS'],
-             "supports_credentials": app.config['CORS_SUPPORTS_CREDENTIALS'],
-             "max_age": app.config['CORS_MAX_AGE']
-         }})
+    CORS(
+        app,
+        resources={
+            r"/*": {
+                "origins": app.config["CORS_ORIGINS"],
+                "methods": app.config["CORS_METHODS"],
+                "allow_headers": app.config["CORS_ALLOW_HEADERS"],
+                "expose_headers": app.config["CORS_EXPOSE_HEADERS"],
+                "supports_credentials": app.config["CORS_SUPPORTS_CREDENTIALS"],
+                "max_age": app.config["CORS_MAX_AGE"],
+            }
+        },
+    )
     compress.init_app(app)
     principal.init_app(app)
 
@@ -108,40 +115,50 @@ def create_app(config_name):
         app.logger.info("Panamaster startup")
 
     # Настройка безопасности сессий
-    login_manager.session_protection = 'strong'
-    login_manager.login_view = 'auth.login'
-    login_manager.login_message = 'Пожалуйста, войдите для доступа к этой странице.'
-    login_manager.login_message_category = 'info'
+    login_manager.session_protection = "strong"
+    login_manager.login_view = "auth.login"
+    login_manager.login_message = "Пожалуйста, войдите для доступа к этой странице."
+    login_manager.login_message_category = "info"
 
     # Регистрация blueprints
     from app.routes.public import public as public_blueprint
+
     app.register_blueprint(public_blueprint)
 
     from app.routes.auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+    app.register_blueprint(auth_blueprint, url_prefix="/auth")
 
     from app.routes.admin import admin as admin_blueprint
-    app.register_blueprint(admin_blueprint, url_prefix='/admin')
+
+    app.register_blueprint(admin_blueprint, url_prefix="/admin")
 
     from app.routes.api import api as api_blueprint
-    app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+
+    app.register_blueprint(api_blueprint, url_prefix="/api/v1")
 
     from app.routes.services import services as services_blueprint
+
     app.register_blueprint(services_blueprint)
 
     from app.routes.articles import articles as articles_blueprint
+
     app.register_blueprint(articles_blueprint)
 
     from app.routes.training import training as training_blueprint
+
     app.register_blueprint(training_blueprint)
 
     from app.routes.jobs import jobs as jobs_blueprint
+
     app.register_blueprint(jobs_blueprint)
 
     from app.routes.company import company as company_blueprint
+
     app.register_blueprint(company_blueprint)
 
     from app.routes.contact import contact as contact_blueprint
+
     app.register_blueprint(contact_blueprint)
 
     # Инициализация обработчиков ошибок
@@ -155,10 +172,7 @@ def create_app(config_name):
     # Контекстный процессор для шаблонов
     @app.context_processor
     def inject_now():
-        return {
-            'now': datetime.utcnow(),
-            'request': request
-        }
+        return {"now": datetime.utcnow(), "request": request}
 
     # Создание таблиц базы данных
     with app.app_context():

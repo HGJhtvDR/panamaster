@@ -3,15 +3,25 @@ from flask_login import current_user, login_required
 from flask_principal import Permission, RoleNeed
 
 from app import db
+from app.models import (
+    Category,
+    Course,
+    Job,
+    Knowledge,
+    Log,
+    Portfolio,
+    Product,
+    Project,
+)
 from app.models.article import Article
 from app.models.service import Service
 from app.models.user import User
-from app.models import Course, Job, Project, Category, Product, Portfolio, Knowledge, Log
 
 from . import admin
 
 # Определение разрешений
-admin_permission = Permission(RoleNeed('admin'))
+admin_permission = Permission(RoleNeed("admin"))
+
 
 @admin.before_request
 @login_required
@@ -20,13 +30,16 @@ def before_request():
     """Проверка прав доступа перед каждым запросом"""
     pass
 
+
 def admin_required(f):
     """Декоратор для проверки прав администратора"""
+
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated or not current_user.is_admin:
             flash("У вас нет доступа к этой странице", "error")
             return redirect(url_for("public.index"))
         return f(*args, **kwargs)
+
     decorated_function.__name__ = f.__name__
     return decorated_function
 
@@ -43,26 +56,26 @@ def index():
 def dashboard():
     """Панель управления"""
     stats = {
-        'users': User.query.count(),
-        'services': Service.query.count(),
-        'articles': Article.query.count(),
-        'courses': Course.query.count(),
-        'jobs': Job.query.count(),
-        'projects': Project.query.count(),
-        'categories': Category.query.count(),
-        'products': Product.query.count(),
-        'portfolios': Portfolio.query.count(),
-        'knowledge': Knowledge.query.count()
+        "users": User.query.count(),
+        "services": Service.query.count(),
+        "articles": Article.query.count(),
+        "courses": Course.query.count(),
+        "jobs": Job.query.count(),
+        "projects": Project.query.count(),
+        "categories": Category.query.count(),
+        "products": Product.query.count(),
+        "portfolios": Portfolio.query.count(),
+        "knowledge": Knowledge.query.count(),
     }
-    return render_template('admin/dashboard.html', stats=stats)
+    return render_template("admin/dashboard.html", stats=stats)
 
 
 @admin.route("/logs")
 def logs():
     """Просмотр логов"""
-    page = request.args.get('page', 1, type=int)
+    page = request.args.get("page", 1, type=int)
     logs = Log.query.order_by(Log.timestamp.desc()).paginate(page=page, per_page=50)
-    return render_template('admin/logs.html', logs=logs)
+    return render_template("admin/logs.html", logs=logs)
 
 
 @admin.route("/users")

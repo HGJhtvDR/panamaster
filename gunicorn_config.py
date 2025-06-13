@@ -4,4 +4,4 @@ timeout = 120
 accesslog = "logs/access.log"
 errorlog = "logs/error.log"
 capture_output = True
-daemon = True 
+daemon = True

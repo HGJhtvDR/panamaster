@@ -38,4 +38,4 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.animate-on-scroll').forEach(element => {
         observer.observe(element);
     });
-}); 
+});

@@ -2,13 +2,14 @@ import pytest
 
 from app import create_app, db
 from app.models.user import User
+
 # from config.test import TestingConfig  # больше не нужен импорт класса
 
 
 @pytest.fixture
 def app():
     """Создает и возвращает тестовое приложение Flask"""
-    app = create_app('testing')
+    app = create_app("testing")
     return app
 
 

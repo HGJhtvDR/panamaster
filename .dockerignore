@@ -19,4 +19,4 @@ coverage.xml
 *.log
 .pytest_cache/
 .git
-.gitignore 
+.gitignore

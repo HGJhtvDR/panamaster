@@ -5,4 +5,4 @@
 from .db import DatabaseManager
 from .file_utils import FileUtils
 
-__all__ = ['DatabaseManager', 'FileUtils'] 
+__all__ = ["DatabaseManager", "FileUtils"]

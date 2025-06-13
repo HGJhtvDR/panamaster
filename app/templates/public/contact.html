@@ -5,7 +5,7 @@
 {% block content %}
 <section class="contact-section">
     <h1>Свяжитесь с нами</h1>
-    
+
     <div class="contact-info">
         <div class="info-card">
             <h3>Адрес</h3>
@@ -23,7 +23,7 @@
 
     <form class="contact-form" method="POST" action="{{ url_for('public.contact') }}">
         {{ form.csrf_token }}
-        
+
         <div class="form-group">
             {{ form.name.label }}
             {{ form.name(class="form-control") }}
@@ -75,4 +75,4 @@
         <button type="submit" class="submit-btn">Отправить сообщение</button>
     </form>
 </section>
-{% endblock %} 
+{% endblock %}

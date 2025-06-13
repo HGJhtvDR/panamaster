@@ -29,4 +29,4 @@ set PYTHON_PATH=C:\Users\user\AppData\Local\Programs\Python\Python313\Scripts\pi
 %PYTHON_PATH% install Pygments==2.17.2
 %PYTHON_PATH% install Markdown==3.5.2
 %PYTHON_PATH% install beautifulsoup4==4.12.3
-%PYTHON_PATH% install lxml==5.1.0 
+%PYTHON_PATH% install lxml==5.1.0

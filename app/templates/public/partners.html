@@ -5,7 +5,7 @@
 {% block content %}
 <section class="partners-section">
     <h1>Наши партнеры</h1>
-    
+
     <div class="partners-info">
         <h2>Станьте нашим партнером</h2>
         <p>Мы открыты для сотрудничества и готовы обсудить взаимовыгодные условия партнерства.</p>
@@ -34,7 +34,7 @@
         <p>Заполните форму, и мы свяжемся с вами для обсуждения деталей сотрудничества.</p>
         <form class="partner-form" method="POST" action="{{ url_for('main.partner_request') }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            
+
             <div class="form-group">
                 <label for="company">Название компании</label>
                 <input type="text" id="company" name="company" required>
@@ -64,4 +64,4 @@
         </form>
     </div>
 </section>
-{% endblock %} 
+{% endblock %}

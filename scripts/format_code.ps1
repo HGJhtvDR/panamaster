@@ -12,4 +12,4 @@ flake8 . --fix
 
 # Проверка типов
 Write-Host "Running MyPy..."
-mypy . 
+mypy .

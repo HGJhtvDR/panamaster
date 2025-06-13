@@ -138,4 +138,4 @@ sudo apt-get upgrade nginx
 
 - [Официальная документация Nginx](https://nginx.org/en/docs/)
 - [Let's Encrypt документация](https://letsencrypt.org/docs/)
-- [Certbot документация](https://certbot.eff.org/docs/) 
+- [Certbot документация](https://certbot.eff.org/docs/)

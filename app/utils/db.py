@@ -2,17 +2,19 @@
 Утилиты для работы с базой данных (SQLAlchemy с SSL, reconnect).
 """
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.exc import SQLAlchemyError
 import time
 from typing import Optional
+
+from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import scoped_session, sessionmaker
+
 
 class DatabaseManager:
     def __init__(self, connection_string: str, ssl_mode: bool = True):
         """
         Инициализация менеджера базы данных.
-        
+
         Args:
             connection_string (str): Строка подключения к БД
             ssl_mode (bool): Использовать SSL для подключения
@@ -27,13 +29,10 @@ class DatabaseManager:
         """Инициализация подключения к базе данных."""
         try:
             # Настройка SSL для PostgreSQL
-            if self.ssl_mode and 'postgresql' in self.connection_string:
+            if self.ssl_mode and "postgresql" in self.connection_string:
                 self.engine = create_engine(
                     self.connection_string,
-                    connect_args={
-                        'sslmode': 'require',
-                        'client_encoding': 'utf8'
-                    }
+                    connect_args={"sslmode": "require", "client_encoding": "utf8"},
                 )
             else:
                 self.engine = create_engine(self.connection_string)
@@ -55,4 +54,4 @@ class DatabaseManager:
     def close_session(self, session):
         """Закрытие сессии БД."""
         if session:
-            session.close() 
+            session.close()

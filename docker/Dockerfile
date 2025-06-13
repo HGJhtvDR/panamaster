@@ -1,4 +1,5 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
+
 
 # Установка системных зависимостей
 RUN apt-get update && apt-get install -y \
@@ -28,4 +29,4 @@ RUN chown -R nobody:nogroup /app
 USER nobody
 
 # Запуск приложения
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "run:app"] 
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "run:app"]

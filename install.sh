@@ -49,4 +49,4 @@ sudo mkdir -p /var/www/panamaster/uploads
 sudo chown -R www-data:www-data /var/www/panamaster/uploads
 
 echo "Установка завершена!"
-echo "Для настройки SSL выполните: ./install_ssl.sh" 
+echo "Для настройки SSL выполните: ./install_ssl.sh"

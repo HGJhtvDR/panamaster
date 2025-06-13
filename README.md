@@ -70,4 +70,4 @@ panamaster/
 
 ## Лицензия
 
-MIT 
+MIT
