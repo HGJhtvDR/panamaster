@@ -1,6 +1,5 @@
-from flask import jsonify, request
+from flask import jsonify
 
-from app import db
 from app.models.article import Article
 from app.models.service import Service
 

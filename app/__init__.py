@@ -14,7 +14,6 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_principal import Permission, Principal, RoleNeed
-from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 
@@ -67,9 +66,7 @@ def create_app(config_name):
 
     # Только для PostgreSQL
     if app.config["SQLALCHEMY_DATABASE_URI"].startswith("postgresql"):
-        app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-            "connect_args": {"client_encoding": "utf8"}
-        }
+        app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"connect_args": {"client_encoding": "utf8"}}
 
     # Инициализация расширений
     db.init_app(app)
@@ -100,13 +97,9 @@ def create_app(config_name):
     if not app.debug and not app.testing:
         if not os.path.exists("logs"):
             os.mkdir("logs")
-        file_handler = RotatingFileHandler(
-            "logs/panamaster.log", maxBytes=10240, backupCount=10
-        )
+        file_handler = RotatingFileHandler("logs/panamaster.log", maxBytes=10240, backupCount=10)
         file_handler.setFormatter(
-            logging.Formatter(
-                "%(asctime)s %(levelname)s: %(message)s " "[in %(pathname)s:%(lineno)d]"
-            )
+            logging.Formatter("%(asctime)s %(levelname)s: %(message)s " "[in %(pathname)s:%(lineno)d]")
         )
         file_handler.setLevel(logging.INFO)
         app.logger.addHandler(file_handler)
@@ -182,6 +175,5 @@ def create_app(config_name):
         except Exception as e:
             logger.error(f"Ошибка при инициализации базы данных: {str(e)}")
             # Продолжаем работу даже при ошибке базы данных
-            pass
 
     return app

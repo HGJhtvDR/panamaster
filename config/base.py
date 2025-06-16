@@ -14,9 +14,7 @@ class Config:
     FLASK_ENV = os.environ.get("FLASK_ENV") or "development"
 
     # Database
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL"
-    ) or "sqlite:///" + os.path.join(
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or "sqlite:///" + os.path.join(
         os.path.abspath(os.path.dirname(__file__)), "..", "app.db"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -38,21 +36,15 @@ class Config:
     REDIS_URL = os.environ.get("REDIS_URL") or "redis://localhost:6379/0"
 
     # Celery
-    CELERY_BROKER_URL = (
-        os.environ.get("CELERY_BROKER_URL") or "redis://localhost:6379/0"
-    )
-    CELERY_RESULT_BACKEND = (
-        os.environ.get("CELERY_RESULT_BACKEND") or "redis://localhost:6379/0"
-    )
+    CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") or "redis://localhost:6379/0"
+    CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND") or "redis://localhost:6379/0"
 
     # CORS
     CORS_ORIGINS = ["http://localhost:5000", "https://yourdomain.com"]
 
     # File upload
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB
-    UPLOAD_FOLDER = os.path.join(
-        os.path.abspath(os.path.dirname(__file__)), "..", "uploads"
-    )
+    UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "uploads")
 
     # Security
     SESSION_COOKIE_SECURE = True

@@ -1,4 +1,3 @@
-from flask import jsonify
 from flask_restful import Resource
 
 from . import api

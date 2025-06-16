@@ -28,7 +28,6 @@ admin_permission = Permission(RoleNeed("admin"))
 @admin_permission.require()
 def before_request():
     """Проверка прав доступа перед каждым запросом"""
-    pass
 
 
 def admin_required(f):

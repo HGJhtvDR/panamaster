@@ -35,9 +35,7 @@ def apply(id):
     try:
         job = Job.query.get_or_404(id)
         if request.method == "POST":
-            application = JobApplication(
-                job_id=job.id, user_id=current_user.id, status="pending"
-            )
+            application = JobApplication(job_id=job.id, user_id=current_user.id, status="pending")
             db.session.add(application)
             db.session.commit()
             flash("Ваша заявка успешно отправлена", "success")

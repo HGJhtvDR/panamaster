@@ -2,7 +2,7 @@
 Модуль для анализа изображений с использованием AI.
 """
 
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from PIL import Image
 

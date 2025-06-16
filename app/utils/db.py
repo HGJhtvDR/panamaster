@@ -3,7 +3,6 @@
 """
 
 import time
-from typing import Optional
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError

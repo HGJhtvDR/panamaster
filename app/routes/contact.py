@@ -1,5 +1,4 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_limiter.util import get_remote_address
 
 from app import limiter  # Используем глобальный limiter
 from app import db

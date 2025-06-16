@@ -4,7 +4,6 @@
 
 import os
 
-from .base import Config
 from .dev import DevelopmentConfig
 from .prod import ProductionConfig
 from .test import TestingConfig

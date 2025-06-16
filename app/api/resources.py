@@ -1,4 +1,3 @@
-from flask_principal import Permission, RoleNeed
 from flask_restful import Resource, reqparse
 
 from app import db
@@ -118,9 +117,7 @@ class ArticleListResource(Resource):
 
     def post(self):
         args = article_parser.parse_args()
-        article = Article(
-            title=args["title"], content=args["content"], author_id=args["author_id"]
-        )
+        article = Article(title=args["title"], content=args["content"], author_id=args["author_id"])
 
         db.session.add(article)
         db.session.commit()

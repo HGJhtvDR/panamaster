@@ -1,9 +1,7 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_login import login_required
 
-from app import db
 from app.models import Service
 
 services = Blueprint("services", __name__)

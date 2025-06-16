@@ -34,9 +34,7 @@ def register(id):
     try:
         course = Course.query.get_or_404(id)
         if request.method == "POST":
-            training = Training(
-                user_id=current_user.id, course_id=course.id, status="pending"
-            )
+            training = Training(user_id=current_user.id, course_id=course.id, status="pending")
             db.session.add(training)
             db.session.commit()
             flash("Вы успешно зарегистрировались на курс", "success")

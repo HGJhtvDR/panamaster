@@ -3,7 +3,7 @@
 """
 
 import os
-from typing import List, Tuple
+from typing import Tuple
 
 import magic  # python-magic для определения MIME-типов
 from werkzeug.utils import secure_filename
@@ -32,9 +32,7 @@ class FileProcessor:
         Returns:
             bool: True если файл разрешен
         """
-        return "." in filename and filename.rsplit(".", 1)[
-            1
-        ].lower() in self.ALLOWED_EXTENSIONS.get(file_type, set())
+        return "." in filename and filename.rsplit(".", 1)[1].lower() in self.ALLOWED_EXTENSIONS.get(file_type, set())
 
     def secure_filename(self, filename: str) -> str:
         """
@@ -64,7 +62,7 @@ class FileProcessor:
         if os.path.getsize(file_path) > self.MAX_FILE_SIZE:
             return False, "Файл слишком большой"
 
-        mime_type = self.mime.from_file(file_path)
+        self.mime.from_file(file_path)
         # TODO: Добавить проверку MIME-типа
 
         return True, "Файл валиден"

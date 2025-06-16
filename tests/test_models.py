@@ -1,6 +1,3 @@
-import pytest
-from werkzeug.security import check_password_hash
-
 from app.models.user import User
 
 

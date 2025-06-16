@@ -4,7 +4,7 @@ import hmac
 import secrets
 from functools import wraps
 
-from flask import current_app, request
+from flask import request
 
 
 def generate_csrf_token():
@@ -16,18 +16,14 @@ def hash_password(password):
     """Безопасное хеширование пароля с использованием PBKDF2"""
     salt = secrets.token_hex(16)
     iterations = 100000
-    key = hashlib.pbkdf2_hmac(
-        "sha256", password.encode("utf-8"), salt.encode("utf-8"), iterations
-    )
+    key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), iterations)
     return f"{salt}${iterations}${base64.b64encode(key).decode('utf-8')}"
 
 
 def verify_password(password, hashed):
     """Проверка пароля"""
     salt, iterations, stored_key = hashed.split("$")
-    key = hashlib.pbkdf2_hmac(
-        "sha256", password.encode("utf-8"), salt.encode("utf-8"), int(iterations)
-    )
+    key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), int(iterations))
     return hmac.compare_digest(base64.b64encode(key).decode("utf-8"), stored_key)
 
 
@@ -37,9 +33,7 @@ def apply_security_headers(response):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "SAMEORIGIN"
     response.headers["X-XSS-Protection"] = "1; mode=block"
-    response.headers["Strict-Transport-Security"] = (
-        "max-age=31536000; includeSubDomains"
-    )
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data:; font-src 'self' https://cdnjs.cloudflare.com;"
     )
