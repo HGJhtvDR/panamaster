@@ -48,3 +48,7 @@ jobs:
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan -H 90.156.135.41 >> ~/.ssh/known_hosts
         rsync -az --delete --exclude=".git*" ./ root@90.156.135.41:/srv/panamaster/
+
+    - name: Restart panamaster systemd service
+      run: |
+        ssh -i ~/.ssh/id_ed25519 root@90.156.135.41 "systemctl restart panamaster && systemctl status panamaster --no-pager"
