@@ -1,39 +1,52 @@
-from flask import Blueprint, render_template
+from typing import cast
 
-company = Blueprint("company", __name__)
+from flask import Blueprint, flash, redirect, render_template, url_for
+from werkzeug.wrappers import Response
+
+bp = Blueprint("company", __name__)
 
 
-@company.route("/company")
-def index():
+@bp.route("/company", methods=["GET"])
+def index() -> Response:
+    """Show company information."""
     try:
-        return render_template("public/company.html")
-    except Exception as e:
+        return cast(Response, render_template("company/index.html"))
+    except Exception:
         flash("Произошла ошибка при загрузке страницы", "error")
         return redirect(url_for("public.index"))
 
 
-@company.route("/company/about")
-def about():
+@bp.route("/company/about", methods=["GET"])
+def about() -> Response:
+    """Show about page."""
     try:
-        return render_template("public/about.html")
-    except Exception as e:
+        return cast(Response, render_template("company/about.html"))
+    except Exception:
         flash("Произошла ошибка при загрузке страницы", "error")
         return redirect(url_for("company.index"))
 
 
-@company.route("/company/team")
-def team():
+@bp.route("/company/team", methods=["GET"])
+def team() -> Response:
+    """Show team page."""
     try:
-        return render_template("public/team.html")
-    except Exception as e:
+        return cast(Response, render_template("company/team.html"))
+    except Exception:
         flash("Произошла ошибка при загрузке страницы", "error")
         return redirect(url_for("company.index"))
 
 
-@company.route("/company/certificates")
-def certificates():
+@bp.route("/company/certificates")
+def certificates() -> Response:
+    """Show certificates page."""
     try:
-        return render_template("public/certificates.html")
-    except Exception as e:
+        return cast(Response, render_template("public/certificates.html"))
+    except Exception:
         flash("Произошла ошибка при загрузке страницы", "error")
         return redirect(url_for("company.index"))
+
+
+@bp.route("/company/careers", methods=["GET"])
+def careers() -> Response:
+    """Show careers page."""
+    return cast(Response, render_template("company/careers.html"))

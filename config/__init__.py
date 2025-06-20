@@ -3,24 +3,30 @@
 """
 
 import os
+from typing import Dict, Type
 
-from .dev import DevelopmentConfig
-from .prod import ProductionConfig
-from .test import TestingConfig
+from config.base import Config
+from config.dev import DevelopmentConfig
+from config.prod import ProductionConfig
+from config.test import TestingConfig
 
 # Словарь конфигураций для разных окружений
-config = {
+config_by_name: Dict[str, Type[Config]] = {
     "development": DevelopmentConfig,
     "production": ProductionConfig,
     "testing": TestingConfig,
-    "default": DevelopmentConfig,
 }
 
 
-def get_config():
+# Глобально доступная точка входа для получения конфигурации по имени
+def get_config(name: str = None) -> Type[Config]:
     """
-    Получение конфигурации на основе переменной окружения FLASK_ENV.
-    Если FLASK_ENV не установлен, используется конфигурация по умолчанию.
+    Получение конфигурации на основе переменной окружения FLASK_ENV
+    или явного параметра `name`. Если не задано — используется "development".
     """
-    config_name = os.getenv("FLASK_ENV", "default")
-    return config[config_name]
+    env = name or os.getenv("FLASK_ENV", "development")
+    return config_by_name.get(env, DevelopmentConfig)
+
+
+# Экспорт конфигураций по имени, чтобы обращаться как config["production"]
+config: Dict[str, Type[Config]] = config_by_name

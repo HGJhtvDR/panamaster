@@ -2,6 +2,7 @@ import logging
 import os
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
+from typing import Optional
 
 from flask import Flask, request
 from flask_babel import Babel
@@ -18,6 +19,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 
 from app.errors import init_error_handlers
+from app.models.user import User
 from app.security import apply_security_headers
 from config import config
 
@@ -45,14 +47,14 @@ user_permission = Permission(user_role)
 
 
 @login_manager.user_loader
-def load_user(user_id):
-    from app.models import User
+def load_user(user_id: int) -> Optional[User]:
+    try:
+        return User.query.get(int(user_id))
+    except Exception:
+        return None
 
-    return User.query.get(int(user_id))
 
-
-def create_app(config_name):
-    # Получаем абсолютный путь к директории приложения
+def create_app(config_name: str) -> Flask:
     base_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
     app = Flask(
@@ -77,6 +79,10 @@ def create_app(config_name):
     csrf.init_app(app)
     cache.init_app(app)
     limiter.init_app(app)
+    compress.init_app(app)
+    principal.init_app(app)
+
+    # CORS
     CORS(
         app,
         resources={
@@ -90,8 +96,6 @@ def create_app(config_name):
             }
         },
     )
-    compress.init_app(app)
-    principal.init_app(app)
 
     # Настройка логирования
     if not app.debug and not app.testing:
@@ -99,70 +103,50 @@ def create_app(config_name):
             os.mkdir("logs")
         file_handler = RotatingFileHandler("logs/panamaster.log", maxBytes=10240, backupCount=10)
         file_handler.setFormatter(
-            logging.Formatter("%(asctime)s %(levelname)s: %(message)s " "[in %(pathname)s:%(lineno)d]")
+            logging.Formatter("%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]")
         )
         file_handler.setLevel(logging.INFO)
         app.logger.addHandler(file_handler)
-
         app.logger.setLevel(logging.INFO)
         app.logger.info("Panamaster startup")
 
-    # Настройка безопасности сессий
     login_manager.session_protection = "strong"
     login_manager.login_view = "auth.login"
     login_manager.login_message = "Пожалуйста, войдите для доступа к этой странице."
     login_manager.login_message_category = "info"
 
     # Регистрация blueprints
-    from app.routes.public import public as public_blueprint
-
-    app.register_blueprint(public_blueprint)
-
-    from app.routes.auth import auth as auth_blueprint
-
-    app.register_blueprint(auth_blueprint, url_prefix="/auth")
-
     from app.routes.admin import admin as admin_blueprint
-
-    app.register_blueprint(admin_blueprint, url_prefix="/admin")
-
     from app.routes.api import api as api_blueprint
-
-    app.register_blueprint(api_blueprint, url_prefix="/api/v1")
-
-    from app.routes.services import services as services_blueprint
-
-    app.register_blueprint(services_blueprint)
-
-    from app.routes.articles import articles as articles_blueprint
-
-    app.register_blueprint(articles_blueprint)
-
+    from app.routes.articles import bp as articles_blueprint
+    from app.routes.auth import auth as auth_blueprint
+    from app.routes.company import bp as company_blueprint
+    from app.routes.contact import bp as contact_blueprint
+    from app.routes.jobs import bp as jobs_blueprint
+    from app.routes.public import bp as public_blueprint
+    from app.routes.services import bp as services_blueprint
     from app.routes.training import training as training_blueprint
 
+    app.register_blueprint(public_blueprint)
+    app.register_blueprint(auth_blueprint, url_prefix="/auth")
+    app.register_blueprint(admin_blueprint, url_prefix="/admin")
+    app.register_blueprint(api_blueprint, url_prefix="/api/v1")
+    app.register_blueprint(services_blueprint)
+    app.register_blueprint(articles_blueprint)
     app.register_blueprint(training_blueprint)
-
-    from app.routes.jobs import jobs as jobs_blueprint
-
     app.register_blueprint(jobs_blueprint)
-
-    from app.routes.company import company as company_blueprint
-
     app.register_blueprint(company_blueprint)
-
-    from app.routes.contact import contact as contact_blueprint
-
     app.register_blueprint(contact_blueprint)
 
-    # Инициализация обработчиков ошибок
+    # Обработчики ошибок
     init_error_handlers(app)
 
-    # Применение заголовков безопасности ко всем ответам
+    # Заголовки безопасности
     @app.after_request
     def add_security_headers(response):
         return apply_security_headers(response)
 
-    # Контекстный процессор для шаблонов
+    # Контекст для шаблонов
     @app.context_processor
     def inject_now():
         return {"now": datetime.utcnow(), "request": request}
@@ -174,6 +158,5 @@ def create_app(config_name):
             logger.info("База данных успешно инициализирована")
         except Exception as e:
             logger.error(f"Ошибка при инициализации базы данных: {str(e)}")
-            # Продолжаем работу даже при ошибке базы данных
 
     return app

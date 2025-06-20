@@ -1,39 +1,38 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from typing import cast
+
+from flask import Blueprint, render_template
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.models import Article, Category
+from app.models.article import Article
 
-articles = Blueprint("articles", __name__)
+bp = Blueprint("articles", __name__)
 
 
-@articles.route("/articles")
-def index():
+@bp.route("/articles")
+def index() -> str:
+    """Show all articles."""
     try:
-        page = request.args.get("page", 1, type=int)
-        articles = Article.query.filter_by(published=True).paginate(page=page, per_page=10)
-        return render_template("public/articles.html", articles=articles)
-    except SQLAlchemyError as e:
-        flash("Произошла ошибка при загрузке статей", "error")
-        return redirect(url_for("public.index"))
+        articles = Article.query.all()
+        return cast(str, render_template("articles/index.html", articles=articles))
+    except SQLAlchemyError:
+        return cast(str, render_template("articles/index.html", articles=[]))
 
 
-@articles.route("/articles/<string:slug>")
-def show(slug):
+@bp.route("/articles/<int:article_id>")
+def show(article_id: int) -> str:
+    """Show a specific article."""
     try:
-        article = Article.query.filter_by(slug=slug, published=True).first_or_404()
-        return render_template("public/article.html", article=article)
-    except SQLAlchemyError as e:
-        flash("Произошла ошибка при загрузке статьи", "error")
-        return redirect(url_for("articles.index"))
+        article = Article.query.get_or_404(article_id)
+        return cast(str, render_template("articles/show.html", article=article))
+    except SQLAlchemyError:
+        return cast(str, render_template("articles/index.html"))
 
 
-@articles.route("/articles/category/<string:category>")
-def category(category):
+@bp.route("/articles/category/<category>")
+def category(category: str) -> str:
+    """Show articles by category."""
     try:
-        page = request.args.get("page", 1, type=int)
-        category = Category.query.filter_by(slug=category).first_or_404()
-        articles = Article.query.filter_by(category_id=category.id, published=True).paginate(page=page, per_page=10)
-        return render_template("public/articles.html", articles=articles, category=category)
-    except SQLAlchemyError as e:
-        flash("Произошла ошибка при загрузке статей категории", "error")
-        return redirect(url_for("articles.index"))
+        articles = Article.query.filter_by(category=category).all()
+        return cast(str, render_template("articles/category.html", articles=articles, category=category))
+    except SQLAlchemyError:
+        return cast(str, render_template("articles/category.html", articles=[], category=category))

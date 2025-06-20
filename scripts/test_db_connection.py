@@ -1,12 +1,17 @@
+import os
+
 from sqlalchemy import text
 
 from app import create_app, db
 
-app = create_app()
+# Указание имени конфигурации
+config_name = os.getenv("FLASK_CONFIG", "development")
+
+app = create_app(config_name)
 
 with app.app_context():
     try:
         db.session.execute(text("SELECT 1"))
-        print("Подключение к базе данных успешно!")
+        print("✅ Подключение к базе данных успешно!")
     except Exception as e:
-        print(f"Ошибка подключения к базе данных: {e}")
+        print(f"❌ Ошибка подключения к базе данных: {e}")

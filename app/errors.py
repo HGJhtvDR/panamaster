@@ -1,188 +1,70 @@
-import traceback
+from typing import Any, Dict, Tuple, Union
 
-from flask import current_app, jsonify, render_template, request
-from werkzeug.exceptions import HTTPException
+from flask import Flask, jsonify, render_template, request
+from werkzeug.exceptions import (
+    BadRequest,
+    Forbidden,
+    HTTPException,
+    InternalServerError,
+    MethodNotAllowed,
+    NotFound,
+    TooManyRequests,
+    Unauthorized,
+)
+
+from app import db
 
 
-def init_error_handlers(app):
+def init_error_handlers(app: Flask) -> None:
     register_client_errors(app)
     register_rate_limit_and_method_errors(app)
     register_server_errors(app)
 
 
-def register_client_errors(app):
-    @app.errorhandler(400)
-    def bad_request_error(error):
-        if request.is_json:
-            return jsonify({"error": "Bad Request", "message": str(error)}), 400
-        return render_template("errors/400.html"), 400
+def register_client_errors(app: Flask) -> None:
+    @app.errorhandler(BadRequest)
+    def bad_request_error(error: BadRequest) -> Tuple[Union[str, Dict[str, Any]], int]:
+        return handle_error(error)
 
-    @app.errorhandler(401)
-    def unauthorized_error(error):
-        if request.is_json:
-            return (
-                jsonify(
-                    {
-                        "error": "Unauthorized",
-                        "message": "Please authenticate to access this resource",
-                    }
-                ),
-                401,
-            )
-        return render_template("errors/401.html"), 401
+    @app.errorhandler(Unauthorized)
+    def unauthorized_error(error: Unauthorized) -> Tuple[Union[str, Dict[str, Any]], int]:
+        return handle_error(error)
 
-    @app.errorhandler(403)
-    def forbidden_error(error):
-        if request.is_json:
-            return (
-                jsonify(
-                    {
-                        "error": "Forbidden",
-                        "message": "You do not have permission to access this resource",
-                    }
-                ),
-                403,
-            )
-        return render_template("errors/403.html"), 403
+    @app.errorhandler(Forbidden)
+    def forbidden_error(error: Forbidden) -> Tuple[Union[str, Dict[str, Any]], int]:
+        return handle_error(error)
 
-    @app.errorhandler(404)
-    def not_found_error(error):
-        return render_template("errors/404.html"), 404
+    @app.errorhandler(NotFound)
+    def not_found_error(error: NotFound) -> Tuple[Union[str, Dict[str, Any]], int]:
+        return handle_error(error)
 
 
-def register_rate_limit_and_method_errors(app):
-    @app.errorhandler(405)
-    def method_not_allowed_error(error):
-        if request.is_json:
-            return (
-                jsonify(
-                    {
-                        "error": "Method Not Allowed",
-                        "message": "The method is not allowed for the requested URL",
-                    }
-                ),
-                405,
-            )
-        return render_template("errors/405.html"), 405
+def register_rate_limit_and_method_errors(app: Flask) -> None:
+    @app.errorhandler(MethodNotAllowed)
+    def method_not_allowed_error(error: MethodNotAllowed) -> Tuple[Union[str, Dict[str, Any]], int]:
+        return handle_error(error)
 
-    @app.errorhandler(429)
-    def too_many_requests_error(error):
-        if request.is_json:
-            return (
-                jsonify(
-                    {
-                        "error": "Too Many Requests",
-                        "message": "Rate limit exceeded",
-                    }
-                ),
-                429,
-            )
-        return render_template("errors/429.html"), 429
+    @app.errorhandler(TooManyRequests)
+    def too_many_requests_error(error: TooManyRequests) -> Tuple[Union[str, Dict[str, Any]], int]:
+        return handle_error(error)
 
 
-def register_server_errors(app):  # noqa: C901
-
-    @app.errorhandler(500)
-    def internal_error(error):
-        return render_template("errors/500.html"), 500
+def register_server_errors(app: Flask) -> None:
+    @app.errorhandler(InternalServerError)
+    def internal_error(error: InternalServerError) -> Tuple[Union[str, Dict[str, Any]], int]:
+        db.session.rollback()
+        return handle_error(error)
 
     @app.errorhandler(Exception)
-    def unhandled_exception(error):
-        current_app.logger.error(f"Unhandled Exception: {error}")
-        current_app.logger.error(traceback.format_exc())
-
+    def unhandled_exception(error: Exception) -> Tuple[Union[str, Dict[str, Any]], int]:
+        db.session.rollback()
         if isinstance(error, HTTPException):
-            return error
+            return handle_error(error)
+        return jsonify({"error": "Internal Server Error"}), 500
 
-        if request.is_json:
-            return (
-                jsonify(
-                    {
-                        "error": "Internal Server Error",
-                        "message": "An unexpected error occurred",
-                    }
-                ),
-                500,
-            )
 
-        return render_template("errors/500.html"), 500
-
-    @app.errorhandler(401)
-    def unauthorized_error(error):
-        if request.is_json:
-            return (
-                jsonify(
-                    {
-                        "error": "Unauthorized",
-                        "message": "Please authenticate to access this resource",
-                    }
-                ),
-                401,
-            )
-        return render_template("errors/401.html"), 401
-
-    @app.errorhandler(403)
-    def forbidden_error(error):
-        if request.is_json:
-            return (
-                jsonify(
-                    {
-                        "error": "Forbidden",
-                        "message": "You do not have permission to access this resource",
-                    }
-                ),
-                403,
-            )
-        return render_template("errors/403.html"), 403
-
-    @app.errorhandler(404)
-    def not_found_error(error):
-        return render_template("errors/404.html"), 404
-
-    @app.errorhandler(405)
-    def method_not_allowed_error(error):
-        if request.is_json:
-            return (
-                jsonify(
-                    {
-                        "error": "Method Not Allowed",
-                        "message": "The method is not allowed for the requested URL",
-                    }
-                ),
-                405,
-            )
-        return render_template("errors/405.html"), 405
-
-    @app.errorhandler(429)
-    def too_many_requests_error(error):
-        if request.is_json:
-            return (
-                jsonify({"error": "Too Many Requests", "message": "Rate limit exceeded"}),
-                429,
-            )
-        return render_template("errors/429.html"), 429
-
-    @app.errorhandler(500)
-    def internal_error(error):
-        return render_template("errors/500.html"), 500
-
-    @app.errorhandler(Exception)
-    def unhandled_exception(error):
-        # Логирование необработанного исключения
-        current_app.logger.error(f"Unhandled Exception: {error}")
-        current_app.logger.error(traceback.format_exc())
-
-        if isinstance(error, HTTPException):
-            return error
-
-        if request.is_json:
-            return (
-                jsonify(
-                    {
-                        "error": "Internal Server Error",
-                        "message": "An unexpected error occurred",
-                    }
-                ),
-                500,
-            )
-        return render_template("errors/500.html"), 500
+def handle_error(error: HTTPException) -> Tuple[Union[str, Dict[str, Any]], int]:
+    status_code = error.code or 500
+    if request.path.startswith("/api/"):
+        return jsonify({"error": str(error)}), status_code
+    return render_template("errors/error.html", error=error), status_code

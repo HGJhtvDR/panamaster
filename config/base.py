@@ -1,160 +1,91 @@
-import os
 from datetime import timedelta
+from typing import List, Optional
 
-from dotenv import load_dotenv
-
-# Загружаем переменные из .env файла
-load_dotenv()
+from flask import Flask
 
 
 class Config:
-    # Flask
-    SECRET_KEY = os.environ.get("SECRET_KEY") or "hard-to-guess-string"
-    FLASK_APP = os.environ.get("FLASK_APP") or "run.py"
-    FLASK_ENV = os.environ.get("FLASK_ENV") or "development"
+    DEBUG: bool = False
+    TESTING: bool = False
 
-    # Database
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or "sqlite:///" + os.path.join(
-        os.path.abspath(os.path.dirname(__file__)), "..", "app.db"
-    )
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # Безопасность cookies
+    SESSION_COOKIE_SECURE: bool = False
+    REMEMBER_COOKIE_SECURE: bool = False
+    SESSION_COOKIE_HTTPONLY: bool = True
+    REMEMBER_COOKIE_HTTPONLY: bool = True
+    SESSION_COOKIE_SAMESITE: Optional[str] = None
+    REMEMBER_COOKIE_SAMESITE: Optional[str] = None
+    SESSION_COOKIE_DOMAIN: Optional[str] = None
+    REMEMBER_COOKIE_DOMAIN: Optional[str] = None
 
-    # JWT
-    JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY") or "jwt-secret-string"
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
-    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
+    # База данных
+    SQLALCHEMY_DATABASE_URI: Optional[str] = None
+    SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
 
-    # Mail
-    MAIL_SERVER = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
-    MAIL_PORT = int(os.environ.get("MAIL_PORT", "587"))
-    MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", "true").lower() in ["true", "on", "1"]
-    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
-    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
-    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
+    # Почта
+    MAIL_SERVER: Optional[str] = None
+    MAIL_PORT: Optional[int] = None
+    MAIL_USE_TLS: Optional[bool] = None
+    MAIL_USERNAME: Optional[str] = None
+    MAIL_PASSWORD: Optional[str] = None
+    MAIL_DEFAULT_SENDER: Optional[str] = None
 
-    # Redis
-    REDIS_URL = os.environ.get("REDIS_URL") or "redis://localhost:6379/0"
+    # Логирование
+    LOG_TO_STDOUT: Optional[bool] = None
+    LOG_LEVEL: Optional[str] = None
 
-    # Celery
-    CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL") or "redis://localhost:6379/0"
-    CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND") or "redis://localhost:6379/0"
+    # Кэш
+    CACHE_TYPE: Optional[str] = None
+    CACHE_REDIS_URL: Optional[str] = None
+    CACHE_DEFAULT_TIMEOUT: Optional[int] = None
+
+    # Сессии
+    SESSION_TYPE: Optional[str] = None
+    PERMANENT_SESSION_LIFETIME: timedelta = timedelta(minutes=20)
+
+    # Пароли
+    SECURITY_PASSWORD_SALT: Optional[str] = None
+    SECURITY_PASSWORD_HASH: Optional[str] = None
+    SECURITY_PASSWORD_LENGTH_MIN: int = 8
 
     # CORS
-    CORS_ORIGINS = ["http://localhost:5000", "https://yourdomain.com"]
+    CORS_ORIGINS: List[str] = []
+    CORS_METHODS: List[str] = []
+    CORS_ALLOW_HEADERS: List[str] = []
+    CORS_EXPOSE_HEADERS: List[str] = []
+    CORS_SUPPORTS_CREDENTIALS: bool = True
+    CORS_MAX_AGE: int = 600
 
-    # File upload
-    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB
-    UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "uploads")
+    # Загрузка файлов
+    MAX_CONTENT_LENGTH: int = 16 * 1024 * 1024  # 16MB
+    UPLOAD_FOLDER: str = "uploads"
 
-    # Security
-    SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_SAMESITE = "Lax"
-    PERMANENT_SESSION_LIFETIME = timedelta(days=1)
+    # JWT
+    JWT_SECRET_KEY: Optional[str] = None
+    JWT_ACCESS_TOKEN_EXPIRES: timedelta = timedelta(hours=1)
+    JWT_REFRESH_TOKEN_EXPIRES: timedelta = timedelta(days=30)
 
-    # Rate limiting
-    RATELIMIT_DEFAULT = "200 per day;50 per hour;10 per minute"
-    RATELIMIT_STORAGE_URL = "memory://"
+    # Лимиты
+    RATELIMIT_DEFAULT: Optional[str] = None
+    RATELIMIT_STORAGE_URL: Optional[str] = None
 
-    # Logging
-    LOG_TO_STDOUT = os.environ.get("LOG_TO_STDOUT")
-    LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
+    # API Rate Limiting
+    API_RATE_LIMIT: Optional[str] = None
+    API_RATE_LIMIT_STORAGE_URL: Optional[str] = None
 
-    # Настройки WTF
-    WTF_CSRF_ENABLED = True
-    WTF_CSRF_SECRET_KEY = SECRET_KEY
-    WTF_CSRF_TIME_LIMIT = 3600  # 1 час
-
-    # Настройки кэширования
-    CACHE_TYPE = "redis"
-    CACHE_REDIS_URL = REDIS_URL
-    CACHE_DEFAULT_TIMEOUT = 300
-
-    # Настройки сжатия
-    COMPRESS_MIMETYPES = [
-        "text/html",
-        "text/css",
-        "text/xml",
-        "application/json",
-        "application/javascript",
-    ]
-    COMPRESS_LEVEL = 6
-    COMPRESS_MIN_SIZE = 500
-
-    # Настройки безопасности
-    SECURITY_PASSWORD_SALT = SECRET_KEY
-    SECURITY_PASSWORD_HASH = "bcrypt"
-    SECURITY_PASSWORD_LENGTH_MIN = 8
-    SECURITY_REGISTERABLE = True
-    SECURITY_SEND_REGISTER_EMAIL = True
-    SECURITY_EMAIL_VALIDATOR_ARGS = {"check_deliverability": True}
-
-    # Telegram
-    TELEGRAM_TOKEN = SECRET_KEY
-
-    # API
-    API_KEY = SECRET_KEY
-
-    # Настройки локализации
-    LANGUAGES = ["ru", "en"]
-    BABEL_DEFAULT_LOCALE = "ru"
-
-    # Настройки API
-    API_RATE_LIMIT = "100 per minute"
-
-    # Security Headers
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
-    X_CONTENT_TYPE_OPTIONS = "nosniff"
-    X_FRAME_OPTIONS = "SAMEORIGIN"
-    X_XSS_PROTECTION = "1; mode=block"
-
-    # Content Security Policy
-    CONTENT_SECURITY_POLICY = {
-        "default-src": "'self'",
-        "script-src": "'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net",
-        "style-src": "'self' 'unsafe-inline' https://cdn.jsdelivr.net",
-        "img-src": "'self' data: https:",
-        "font-src": "'self' https://cdn.jsdelivr.net",
-        "connect-src": "'self'",
-        "frame-ancestors": "'none'",
-        "form-action": "'self'",
-        "base-uri": "'self'",
-        "object-src": "'none'",
-        "frame-src": "'none'",
-        "media-src": "'none'",
-        "worker-src": "'none'",
-        "manifest-src": "'self'",
-        "prefetch-src": "'self'",
-        "upgrade-insecure-requests": "",
-        "block-all-mixed-content": "",
-    }
-
-    # CORS settings
-    CORS_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-    CORS_ALLOW_HEADERS = ["Content-Type", "Authorization", "X-Requested-With"]
-    CORS_EXPOSE_HEADERS = ["Content-Range", "X-Content-Range"]
-    CORS_SUPPORTS_CREDENTIALS = True
-    CORS_MAX_AGE = 3600
-
-    # Password Policy
-    PASSWORD_MIN_LENGTH = 12
-    PASSWORD_REQUIRE_UPPER = True
-    PASSWORD_REQUIRE_LOWER = True
-    PASSWORD_REQUIRE_DIGITS = True
-    PASSWORD_REQUIRE_SPECIAL = True
-
-    # Session Security
-    SESSION_COOKIE_NAME = "__Host-session"
-    REMEMBER_COOKIE_NAME = "__Host-remember"
-    REMEMBER_COOKIE_SECURE = True
-    REMEMBER_COOKIE_HTTPONLY = True
-    REMEMBER_COOKIE_SAMESITE = "Lax"
-
-    # File Upload Security
-    UPLOAD_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif", ".pdf", ".doc", ".docx"]
-    UPLOAD_PATH = "uploads"
+    # Celery
+    CELERY_BROKER_URL: Optional[str] = None
+    CELERY_RESULT_BACKEND: Optional[str] = None
+    CELERY_TASK_SERIALIZER: Optional[str] = None
+    CELERY_RESULT_SERIALIZER: Optional[str] = None
+    CELERY_ACCEPT_CONTENT: List[str] = []
+    CELERY_TIMEZONE: Optional[str] = None
+    CELERY_ENABLE_UTC: Optional[bool] = None
+    CELERY_TASK_TRACK_STARTED: Optional[bool] = None
+    CELERY_TASK_TIME_LIMIT: Optional[int] = None
+    CELERY_TASK_SOFT_TIME_LIMIT: Optional[int] = None
 
     @staticmethod
-    def init_app(app):
+    def init_app(app: Flask) -> None:
+        # Заглушка под кастомные инициализации — logging, мониторинг и т.п.
         pass

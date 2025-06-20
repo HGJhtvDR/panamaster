@@ -1,47 +1,41 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_login import current_user, login_required
+from typing import cast
+
+from flask import Blueprint, flash, redirect, render_template, url_for
 from sqlalchemy.exc import SQLAlchemyError
 
-from app import db
-from app.models import Job, JobApplication
+from app.models.job import Job
 
-jobs = Blueprint("jobs", __name__)
+bp = Blueprint("jobs", __name__)
 
 
-@jobs.route("/jobs")
-def index():
+@bp.route("/jobs")
+def index() -> str:
+    """Show all job listings."""
     try:
-        page = request.args.get("page", 1, type=int)
-        jobs = Job.query.filter_by(active=True).paginate(page=page, per_page=10)
-        return render_template("public/jobs.html", jobs=jobs)
-    except SQLAlchemyError as e:
-        flash("Произошла ошибка при загрузке вакансий", "error")
-        return redirect(url_for("public.index"))
+        jobs = Job.query.all()
+        return cast(str, render_template("jobs/index.html", jobs=jobs))
+    except SQLAlchemyError:
+        flash("Error loading jobs", "error")
+        return cast(str, render_template("jobs/index.html", jobs=[]))
 
 
-@jobs.route("/jobs/<int:id>")
-def show(id):
+@bp.route("/jobs/<int:job_id>")
+def show(job_id: int) -> str:
+    """Show a specific job listing."""
     try:
-        job = Job.query.get_or_404(id)
-        return render_template("public/job.html", job=job)
-    except SQLAlchemyError as e:
-        flash("Произошла ошибка при загрузке вакансии", "error")
-        return redirect(url_for("jobs.index"))
+        job = Job.query.get_or_404(job_id)
+        return cast(str, render_template("jobs/show.html", job=job))
+    except SQLAlchemyError:
+        flash("Error loading job", "error")
+        return cast(str, redirect(url_for("jobs.index")))
 
 
-@jobs.route("/jobs/apply/<int:id>", methods=["GET", "POST"])
-@login_required
-def apply(id):
+@bp.route("/jobs/apply/<int:job_id>")
+def apply(job_id: int) -> str:
+    """Apply for a job."""
     try:
-        job = Job.query.get_or_404(id)
-        if request.method == "POST":
-            application = JobApplication(job_id=job.id, user_id=current_user.id, status="pending")
-            db.session.add(application)
-            db.session.commit()
-            flash("Ваша заявка успешно отправлена", "success")
-            return redirect(url_for("jobs.show", id=job.id))
-        return render_template("public/job_apply.html", job=job)
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        flash("Произошла ошибка при отправке заявки", "error")
-        return redirect(url_for("jobs.index"))
+        job = Job.query.get_or_404(job_id)
+        return cast(str, render_template("jobs/apply.html", job=job))
+    except SQLAlchemyError:
+        flash("Error loading job", "error")
+        return cast(str, redirect(url_for("jobs.index")))

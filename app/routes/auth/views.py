@@ -1,47 +1,70 @@
-from flask import flash, redirect, render_template, request, url_for
-from flask_login import current_user, login_required, login_user, logout_user
+from typing import Union
 
-from app.forms import LoginForm, RegistrationForm
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy.exc import SQLAlchemyError
+from werkzeug.wrappers import Response as WerkzeugResponse
+
+from app import db
 from app.models.user import User
 
-from . import auth
+bp = Blueprint("auth", __name__)
+ResponseType = Union[str, WerkzeugResponse]
 
 
-@auth.route("/login", methods=["GET", "POST"])
-def login():
+@bp.route("/login", methods=["GET", "POST"])
+def login() -> ResponseType:
+    """Handle user login."""
     if current_user.is_authenticated:
         return redirect(url_for("public.index"))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is not None and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            next_page = request.args.get("next")
-            if next_page is None or not next_page.startswith("/"):
-                next_page = url_for("public.index")
-            return redirect(next_page)
-        flash("Неверный email или пароль", "error")
-    return render_template("auth/login.html", form=form)
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        user = User.query.filter_by(username=username).first()
+
+        if user and user.check_password(password):
+            login_user(user)
+            return redirect(url_for("main.index"))
+
+        flash("Invalid username or password", "error")
+
+    return render_template("auth/login.html")
 
 
-@auth.route("/logout")
+@bp.route("/logout")
 @login_required
-def logout():
+def logout() -> WerkzeugResponse:
+    """Handle user logout."""
     logout_user()
     flash("Вы успешно вышли из системы", "success")
-    return redirect(url_for("public.index"))
+    return redirect(url_for("main.index"))
 
 
-@auth.route("/register", methods=["GET", "POST"])
-def register():
+@bp.route("/register", methods=["GET", "POST"])
+def register() -> ResponseType:
+    """Handle user registration."""
     if current_user.is_authenticated:
         return redirect(url_for("public.index"))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(email=form.email.data, username=form.username.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash("Регистрация успешна! Теперь вы можете войти.", "success")
-        return redirect(url_for("auth.login"))
-    return render_template("auth/register.html", form=form)
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        if User.query.filter_by(username=username).first():
+            flash("Username already exists", "error")
+            return render_template("auth/register.html")
+
+        try:
+            user = User(username=username)
+            user.set_password(password)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user)
+            return redirect(url_for("main.index"))
+        except SQLAlchemyError:
+            db.session.rollback()
+            flash("Error creating user", "error")
+            return render_template("auth/register.html")
+
+    return render_template("auth/register.html")

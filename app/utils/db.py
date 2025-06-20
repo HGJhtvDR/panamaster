@@ -3,14 +3,15 @@
 """
 
 import time
+from typing import Optional
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
 
 class DatabaseManager:
-    def __init__(self, connection_string: str, ssl_mode: bool = True):
+    def __init__(self, connection_string: str, ssl_mode: bool = True) -> None:
         """
         Инициализация менеджера базы данных.
 
@@ -21,13 +22,12 @@ class DatabaseManager:
         self.connection_string = connection_string
         self.ssl_mode = ssl_mode
         self.engine = None
-        self.Session = None
+        self.Session: Optional[scoped_session] = None
         self.initialize()
 
-    def initialize(self):
+    def initialize(self) -> None:
         """Инициализация подключения к базе данных."""
         try:
-            # Настройка SSL для PostgreSQL
             if self.ssl_mode and "postgresql" in self.connection_string:
                 self.engine = create_engine(
                     self.connection_string,
@@ -38,19 +38,18 @@ class DatabaseManager:
 
             self.Session = scoped_session(sessionmaker(bind=self.engine))
         except SQLAlchemyError as e:
-            raise Exception(f"Ошибка инициализации БД: {str(e)}")
+            raise RuntimeError("Ошибка инициализации БД") from e
 
-    def get_session(self):
+    def get_session(self) -> Session:
         """Получение сессии БД с автоматическим переподключением."""
         try:
             return self.Session()
         except SQLAlchemyError:
-            # Попытка переподключения
             time.sleep(1)
             self.initialize()
             return self.Session()
 
-    def close_session(self, session):
+    def close_session(self, session: Optional[Session]) -> None:
         """Закрытие сессии БД."""
         if session:
             session.close()

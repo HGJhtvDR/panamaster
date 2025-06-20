@@ -46,5 +46,3 @@ if (!(Test-Path ".flake8")) {
 Write-Host "`n[5/5] Запускаем black и pre-commit..."
 black .
 pre-commit run --all-files
-
-
