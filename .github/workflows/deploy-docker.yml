@@ -20,8 +20,8 @@ jobs:
 
       - name: 🧱 Build and export Docker image to tar
         run: |
-          docker build -t panamaster:latest .
-          docker save panamaster:latest > panamaster.tar
+          docker build -t panamaster:latest -f docker/Dockerfile .
+          docker save panamaster:latest -o panamaster.tar
 
       - name: 🔐 Copy Docker image to server via rsync
         env:
