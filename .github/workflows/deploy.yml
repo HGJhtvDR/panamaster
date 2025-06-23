@@ -46,7 +46,7 @@ jobs:
           echo "$DEPLOY_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H 90.156.135.41 >> ~/.ssh/known_hosts
-          rsync -az --delete --exclude=".git*" ./ root@90.156.135.41:/srv/panamaster/
+          rsync -az --delete --exclude=".git*" ./ root@90.156.135.41:/var/www/panamaster/
 
       - name: Restart panamaster systemd service
         env:
