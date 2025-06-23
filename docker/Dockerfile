@@ -20,5 +20,12 @@ COPY . .
 # Создание нужных директорий
 RUN mkdir -p uploads/portfolio uploads/knowledge_attachments uploads/diagnostics
 
+# Открытие порта
+EXPOSE 5000
+
+# Здоровье контейнера (healthcheck)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:5000/ || exit 1
+
 # Запуск приложения
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "run:app"]
