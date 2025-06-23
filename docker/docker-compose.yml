@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   web:
+    container_name: panamaster
     build:
       context: ..
       dockerfile: docker/Dockerfile
@@ -9,7 +10,7 @@ services:
       - "5000:5000"
     environment:
       - FLASK_APP=run.py
-      - FLASK_ENV=production
+      - FLASK_ENV=development
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/panamaster
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/0
@@ -19,6 +20,7 @@ services:
       - redis
     volumes:
       - ../uploads:/app/uploads
+      - ..:/app
     networks:
       - panamaster-network
 
@@ -47,7 +49,7 @@ services:
     command: celery -A app.celery worker --loglevel=info
     environment:
       - FLASK_APP=run.py
-      - FLASK_ENV=production
+      - FLASK_ENV=development
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/panamaster
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/0

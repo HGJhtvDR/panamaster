@@ -1,30 +1,30 @@
-from typing import cast
-
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask.wrappers import Response
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.models.service import Service
+from app.models.service import Service  # Убедись, что модель действительно здесь
 
-bp = Blueprint("services", __name__)
+services = Blueprint("services", __name__)
+limiter = Limiter(key_func=get_remote_address)
 
 
-@bp.route("/services")
-def index() -> str:
-    """Show all services."""
+@services.route("/services")
+def index() -> Response:
     try:
-        services = Service.query.all()
-        return cast(str, render_template("services/index.html", services=services))
+        services_list = Service.query.all()
+        return render_template("public/services.html", services=services_list)
     except SQLAlchemyError:
-        flash("Error loading services", "error")
-        return cast(str, render_template("services/index.html", services=[]))
+        flash("Произошла ошибка при загрузке услуг", "error")
+        return redirect(url_for("public.index"))
 
 
-@bp.route("/services/<int:service_id>")
-def show(service_id: int) -> str:
-    """Show a specific service."""
+@services.route("/service/<int:id>")
+def show(id: int) -> Response:
     try:
-        service = Service.query.get_or_404(service_id)
-        return cast(str, render_template("services/show.html", service=service))
+        service = Service.query.get_or_404(id)
+        return render_template("public/service.html", service=service)
     except SQLAlchemyError:
-        flash("Error loading service", "error")
-        return cast(str, redirect(url_for("services.index")))
+        flash("Произошла ошибка при загрузке услуги", "error")
+        return redirect(url_for("services.index"))

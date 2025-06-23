@@ -12,8 +12,6 @@ from werkzeug.exceptions import (
     Unauthorized,
 )
 
-from app import db
-
 
 def init_error_handlers(app: Flask) -> None:
     register_client_errors(app)
@@ -50,6 +48,8 @@ def register_rate_limit_and_method_errors(app: Flask) -> None:
 
 
 def register_server_errors(app: Flask) -> None:
+    from app import db  # 👈 Переносим импорт внутрь
+
     @app.errorhandler(InternalServerError)
     def internal_error(error: InternalServerError) -> Tuple[Union[str, Dict[str, Any]], int]:
         db.session.rollback()

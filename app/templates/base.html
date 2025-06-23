@@ -197,11 +197,7 @@
         <nav>
             <div>
                 <div class="nav-links">
-                    <a href="{{ url_for('main.index') }}" class="{{ 'active' if request.endpoint == 'main.index' else '' }}">Услуги</a>
-                    <a href="{{ url_for('main.services') }}" class="{{ 'active' if request.endpoint == 'main.services' else '' }}">Наши работы</a>
-                    <a href="#" class="{{ 'active' if request.endpoint == 'main.vacancies' else '' }}">Вакансии</a>
-                    <a href="#" class="{{ 'active' if request.endpoint == 'main.contacts' else '' }}">Контакты</a>
-                    <a href="{{ url_for('main.company') }}" class="{{ 'active' if request.endpoint == 'main.company' and request.path == '/company' else '' }}">Компания</a>
+                    <a href="/" class="active">Главная</a>
                 </div>
             </div>
         </nav>
