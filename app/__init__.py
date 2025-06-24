@@ -4,7 +4,7 @@ from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from typing import Optional
 
-from flask import Flask, request
+from flask import Flask, Response, request
 from flask_babel import Babel
 from flask_caching import Cache
 from flask_compress import Compress
@@ -19,8 +19,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 
 from app.errors import init_error_handlers
-
-# from app.models.user import User  # ❌ Комментарий — файл отсутствует
 from app.security import apply_security_headers
 from config import config
 
@@ -47,7 +45,7 @@ admin_permission = Permission(admin_role)
 user_permission = Permission(user_role)
 
 
-# Заглушка для user_loader — вернётся None, чтобы не падал Flask-Login
+# Заглушка для user_loader
 @login_manager.user_loader
 def load_user(user_id: int) -> Optional[object]:
     return None
@@ -64,10 +62,33 @@ def create_app(config_name: str) -> Flask:
         template_folder=os.path.join(base_dir, "templates"),
         static_folder=os.path.join(base_dir, "static"),
     )
-    # Минимальная конфигурация
+
     app.config["SECRET_KEY"] = "dev"
-    # Регистрируем только public blueprint
+
     from app.routes.public import bp as public_blueprint
 
     app.register_blueprint(public_blueprint)
+
+    # Инициализация расширений
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
+    mail.init_app(app)
+    babel.init_app(app)
+    cache.init_app(app)
+    limiter.init_app(app)
+    compress.init_app(app)
+    principal.init_app(app)
+    csrf.init_app(app)
+
+    init_error_handlers(app)
+
+    @app.after_request
+    def add_security_headers(response: Response) -> Response:
+        return apply_security_headers(response)
+
     return app
+
+
+# Экземпляр приложения для gunicorn
+app = create_app("production")
